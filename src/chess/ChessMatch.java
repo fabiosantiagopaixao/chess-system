@@ -21,7 +21,6 @@ public class ChessMatch {
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
 	
-	
 	public ChessMatch() {
 		this.turn = 1;
 		this.currentPlayer = Color.WHITE;
@@ -73,7 +72,7 @@ public class ChessMatch {
 		this.validateSourcePosition(source);
 		this.validateTargetPosition(source, target);
 		
-		Piece capturedPiece = makeMove(source, target);
+		Piece capturedPiece = this.makeMove(source, target);
 		
 		if (this.testCheck(this.currentPlayer)) {
 			this.undoMove(source, target, capturedPiece);
@@ -93,7 +92,8 @@ public class ChessMatch {
 	}
 
 	private Piece makeMove(Position source, Position target) {
-		Piece p = this.board.removePiece(source);
+		ChessPiece p = (ChessPiece) this.board.removePiece(source);
+		p.increaseMoveCount();
 		Piece capturedPiece = board.removePiece(target);
 		this.board.placePiece(p, target);
 		
@@ -110,7 +110,8 @@ public class ChessMatch {
 		Position target,
 		Piece capturedPiece
 	) {
-		Piece p = this.board.removePiece(target);
+		ChessPiece p = (ChessPiece) this.board.removePiece(target);
+		p.decreaseMoveCount();
 		this.board.placePiece(p, source);
 		
 		if(capturedPiece != null) {
